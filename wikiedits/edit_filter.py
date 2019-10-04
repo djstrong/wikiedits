@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-
-from wikiedits.diff_finder import DiffFinder
-
 import nltk.data
 import Levenshtein
 import math
@@ -40,8 +37,7 @@ class EditFilter(object):
             old_sent = old_sent.strip()
             new_sent = new_sent.strip()
 
-            log.info("processing sentences:\n  > %s\n  > %s",
-                old_sent, new_sent)
+            log.info("processing sentences:\n  > %s\n  > %s", old_sent, new_sent)
 
             scores = self.__looks_like_sentence_edition(old_sent, new_sent)
             if not scores:
@@ -117,8 +113,7 @@ class EditFilter(object):
 
         min_words = min(len(old_words), len(new_words))
         dist = self.__levenshtein_on_words(old_words, new_words)
-        ratio = dist / float(min_words) * math.log(min_words,
-            self.LEVENSHTEIN_RATIO_LOG_BASE)
+        ratio = dist / float(min_words) * math.log(min_words, self.LEVENSHTEIN_RATIO_LOG_BASE)
 
         return (ratio, dist)
 
@@ -129,6 +124,6 @@ class EditFilter(object):
             word_map[word] = chr((char % 93) + 33)
             char += 1
 
-        list1 = ''.join([word_map[word] for word in words1])
-        list2 = ''.join([word_map[word] for word in words2])
+        list1 = ''.join(word_map[word] for word in words1)
+        list2 = ''.join(word_map[word] for word in words2)
         return Levenshtein.distance(list1, list2)

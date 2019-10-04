@@ -1,25 +1,22 @@
 # -*- coding: utf-8 -*-
 
 import re
-import sys
 from difflib import ndiff, restore
-import pprint
 
-# pp = pprint.PrettyPrinter(stream=sys.stderr)
 
 class DiffFinder(object):
 
     def edited_fragments(self, old_frags, new_frags):
         try:
             raw_diff = ndiff(old_frags, new_frags)
-        except:
+        except Exception:
             return []
 
         edits = []
         for edit in self.__diff_fragments(raw_diff):
             old_edit = '\n'.join(restore(edit, 1))
             new_edit = '\n'.join(restore(edit, 2))
-            edits.append( (old_edit, new_edit) )
+            edits.append((old_edit, new_edit))
         return edits
 
     def __diff_fragments(self, raw_diff):
@@ -34,8 +31,8 @@ class DiffFinder(object):
     def __clean_diff(self, diff):
         try:
             return [line for line in list(diff) if not line.startswith('?')]
-        except:
+        except Exception:
             return []
 
     def __diff_actions(self, diffs):
-        return ''.join([line[0] for line in diffs])
+        return ''.join(line[0] for line in diffs)
