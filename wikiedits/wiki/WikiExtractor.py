@@ -61,7 +61,7 @@ import urllib
 import re
 import bz2
 import os.path
-from htmlentitydefs import name2codepoint
+from html.entities import name2codepoint
 
 ### PARAMS ####################################################################
 
@@ -464,7 +464,7 @@ def compact(text):
                 title += '.'
             headers[lev] = title
             # drop previous headers
-            for i in headers.keys():
+            for i in list(headers.keys()):
                 if i > lev:
                     del headers[i]
             emptySection = True
@@ -489,7 +489,7 @@ def compact(text):
         elif (line[0] == '(' and line[-1] == ')') or line.strip('.-') == '':
             continue
         elif len(headers):
-            items = headers.items()
+            items = list(headers.items())
             items.sort()
             for (i, v) in items:
                 page.append(v)
