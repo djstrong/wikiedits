@@ -121,14 +121,14 @@ def WikiDocument(out, id, title, text):
     header = '<doc id="%s" url="%s" title="%s">\n' % (id, url, title)
     # Separate header from text with a newline.
     header += title + '\n'
-    header = header.encode('utf-8')
+    header = header
     text = clean(text)
     footer = "\n</doc>"
     out.reserve(len(header) + len(text) + len(footer))
-    print >> out, header
+    print(header, file=out)
     for line in compact(text):
-        print >> out, line.encode('utf-8')
-    print >> out, footer
+        print(line, file=out)
+    print(footer, file=out)
 
 def get_url(id, prefix):
     return "%s?curid=%s" % (prefix, id)
@@ -563,7 +563,7 @@ def process_data(input, output):
     inText = False
     redirect = False
     for line in input:
-        line = line.decode('utf-8')
+        line = line
         tag = ''
         if '<' in line:
             m = tagRE.search(line)
@@ -594,7 +594,7 @@ def process_data(input, output):
             colon = title.find(':')
             if (colon < 0 or title[:colon] in acceptedNamespaces) and \
                     not redirect:
-                print id, title.encode('utf-8')
+                print(id, title)
                 sys.stdout.flush()
                 WikiDocument(output, id, title, ''.join(page))
             id = None
@@ -608,10 +608,10 @@ def process_data(input, output):
 ### CL INTERFACE ############################################################
 
 def show_help():
-    print >> sys.stdout, __doc__,
+    print(__doc__, file=sys.stdout)
 
 def show_usage(script_name):
-    print >> sys.stderr, 'Usage: %s [options]' % script_name
+    print('Usage: %s [options]' % script_name, file=sys.stderr)
 
 ##
 # Minimum size of output files
@@ -654,15 +654,14 @@ def main():
                     file_size = int(arg)
                 if file_size < minFileSize: raise ValueError()
             except ValueError:
-                print >> sys.stderr, \
-                '%s: %s: Insufficient or invalid size' % (script_name, arg)
+                prin('%s: %s: Insufficient or invalid size' % (script_name, arg), file=sys.stderr)
                 sys.exit(2)
         elif opt in ('-n', '--ns'):
                 acceptedNamespaces = set(arg.split(','))
         elif opt in ('-o', '--output'):
                 output_dir = arg
         elif opt in ('-v', '--version'):
-                print 'WikiExtractor.py version:', version
+                print('WikiExtractor.py version:', version)
                 sys.exit(0)
 
     if len(args) > 0:
@@ -673,7 +672,7 @@ def main():
         try:
             os.makedirs(output_dir)
         except:
-            print >> sys.stderr, 'Could not create: ', output_dir
+            print('Could not create: ', output_dir, file=sys.stderr)
             return
 
     if not keepLinks:
