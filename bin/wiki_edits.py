@@ -1,17 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 import sys
-import os
 import argparse
 import logging
 import yaml
-
-# it may be required if you have installed NLTK locally
-#import nltk.data
-#nltk.data.path.append('$HOME/nltk_data')
-
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
 
 from wikiedits.wiki_edit_extractor import WikiEditExtractor
 from wikiedits import LANGUAGES
@@ -23,7 +15,8 @@ def main():
     if args.debug:
         set_logging_level('debug')
 
-    wiki = WikiEditExtractor(args.input or sys.stdin,
+    # TODO: add back the ability of taking stdin as input
+    wiki = WikiEditExtractor(args.input,
                              lang=args.language,
                              min_words=args.min_words,
                              max_words=args.max_words,
@@ -50,19 +43,21 @@ def main():
             out.write(format_meta_data(meta) + "\n")
 
         for (old_edit, new_edit, scores) in edits:
-            out.write(output.format(old=old_edit.encode('utf-8'),
-                      new=new_edit.encode('utf-8'),
+            out.write(output.format(old=old_edit,
+                      new=new_edit,
                       ratio=scores[0],
                       dist=scores[1]))
 
     if args.output != sys.stdout:
         out.close()
 
+
 def format_meta_data(data):
     lines = ["### %s" % line
              for line in yaml.dump(data, allow_unicode=True).split('\n')
              if line]
     return '\n'.join(lines)
+
 
 def parse_user_args():
     parser = argparse.ArgumentParser(
@@ -88,17 +83,17 @@ def parse_user_args():
                        help="specify language of NLTK sentence splitter",
                        choices=LANGUAGES)
     group.add_argument("--min-chars", type=int, default=10,
-                       help="set the minimum number of characters in a " \
+                       help="set the minimum number of characters in a "
                             "sentence")
     group.add_argument("--min-words", type=int, default=2,
                        help="set minimum length of sentence in words")
     group.add_argument("--max-words", type=int, default=120,
                        help="set maximum length of sentence in words")
     group.add_argument("--length-diff", type=int, default=4,
-                       help="set maximum difference in length between " \
+                       help="set maximum difference in length between "
                             "edited sentences")
     group.add_argument("--edit-ratio", type=float, default=0.3,
-                       help="set maximum relative difference in edit " \
+                       help="set maximum relative difference in edit "
                             "distance")
 
     args = parser.parse_args()
@@ -107,6 +102,7 @@ def parse_user_args():
     if args.output == "<STDOUT>":
         args.output = sys.stdout
     return args
+
 
 def set_logging_level(log_level):
     if log_level is not None:

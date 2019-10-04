@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-import os
 import sys
 import re
 
@@ -22,7 +21,7 @@ def main():
                 edist = m.group(1)
                 ratio = m.group(2)
             if not SKIP_COMMENTS:
-                print line
+                print(line)
             err = None
             cor = None
         elif line:
@@ -31,17 +30,17 @@ def main():
             else:
                 cor = line.replace('\t', '')
                 if edist and ratio:
-                    print "{}\t{}\t{}\t{}".format(err, cor, edist, ratio)
+                    print("{}\t{}\t{}\t{}".format(err, cor, edist, ratio))
                 else:
-                    print "{}\t{}".format(err, cor)
+                    print("{}\t{}".format(err, cor))
                 err = None
                 cor = None
                 edist = None
                 ratio = None
 
+
 if __name__ == '__main__':
     if '-h' in sys.argv or '--help' in sys.argv:
-        print "Usage: python {} < enwiki.xxx.edit > enwiki.xxx.txt" \
-            .format(sys.argv[0])
+        print("Usage: python {} < enwiki.xxx.edit > enwiki.xxx.txt".format(sys.argv[0]))
         exit()
     main()
