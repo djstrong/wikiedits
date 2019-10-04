@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from wiki.revision_iterator import RevisionIterator
-from wikiedits.edit_extractor import EditExtractor
+from .wiki.revision_iterator import RevisionIterator
+from .edit_extractor import EditExtractor
+
 
 class WikiEditExtractor(object):
 

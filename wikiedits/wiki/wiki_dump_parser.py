@@ -3,6 +3,7 @@
 from lxml import etree
 import sys
 
+
 class WikiDumpParser(object):
 
     def __init__(self, filename):
