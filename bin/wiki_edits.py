@@ -98,7 +98,7 @@ def parse_user_args():
 
     args = parser.parse_args()
     if args.input == "<STDIN>":
-        args.input = sys.stdin
+        args.input = sys.stdin.buffer.raw
     if args.output == "<STDOUT>":
         args.output = sys.stdout
     return args
