@@ -59,6 +59,8 @@ def process_dump_file(file, work_dir, options):
         cmd = "cat"
     elif file_ext.startswith('.gz'):
         cmd = "zcat"
+    elif file_ext.startswith('.bz'):
+        cmd = "bzcat"
     else:
         debug("file extension {} not recognized!".format(file_ext))
         return False
